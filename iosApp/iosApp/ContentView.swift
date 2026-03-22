@@ -1,28 +1,19 @@
 import SwiftUI
-import Shared
 
 struct ContentView: View {
-    @State private var showContent = false
     var body: some View {
-        VStack {
-            Button("Click me!") {
-                withAnimation {
-                    showContent = !showContent
-                }
-            }
-
-            if showContent {
-                VStack(spacing: 16) {
-                    Image(systemName: "swift")
-                        .font(.system(size: 200))
-                        .foregroundColor(.accentColor)
-                    Text("SwiftUI: \(Greeting().greet())")
-                }
-                .transition(.move(edge: .top).combined(with: .opacity))
-            }
+        VStack(spacing: 16) {
+            Image(systemName: "airplane")
+                .font(.system(size: 80))
+                .foregroundColor(.accentColor)
+            Text("SpaceLaunch")
+                .font(.largeTitle)
+                .fontWeight(.bold)
+            Text("Launches • ISS Tracker • News")
+                .font(.subheadline)
+                .foregroundColor(.secondary)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-        .padding()
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 
