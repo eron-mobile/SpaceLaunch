@@ -1,39 +1,61 @@
-This is a Kotlin Multiplatform project targeting Android, iOS.
+# SpaceLaunch
 
-* [/composeApp](./composeApp/src) is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - [commonMain](./composeApp/src/commonMain/kotlin) is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    the [iosMain](./composeApp/src/iosMain/kotlin) folder would be the right place for such calls.
-    Similarly, if you want to edit the Desktop (JVM) specific part, the [jvmMain](./composeApp/src/jvmMain/kotlin)
-    folder is the appropriate location.
+A Kotlin Multiplatform app for tracking space launches, the ISS in real time, and space news — built as a portfolio project showcasing modern Android/KMP architecture.
 
-* [/iosApp](./iosApp/iosApp) contains iOS applications. Even if you’re sharing your UI with Compose Multiplatform,
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
+## Features (Planned)
 
-* [/shared](./shared/src) is for the code that will be shared between all targets in the project.
-  The most important subfolder is [commonMain](./shared/src/commonMain/kotlin). If preferred, you
-  can add code to the platform-specific folders here too.
+- **Upcoming Launches** — Browse and search upcoming rocket launches worldwide (Launch Library 2 API)
+- **ISS Live Tracker** — Real-time International Space Station position on a map with crew info
+- **Space News** — NASA Astronomy Picture of the Day + spaceflight news articles
 
-### Build and Run Android Application
+## Architecture
 
-To build and run the development version of the Android app, use the run configuration from the run widget
-in your IDE’s toolbar or build it directly from the terminal:
-- on macOS/Linux
-  ```shell
-  ./gradlew :composeApp:assembleDebug
-  ```
-- on Windows
-  ```shell
-  .\gradlew.bat :composeApp:assembleDebug
-  ```
+The project follows a **KMP-first** approach with shared business logic and platform-native UI:
 
-### Build and Run iOS Application
+```
+SpaceLaunch/
+├── shared/              # Kotlin Multiplatform shared module
+│   ├── commonMain/      #   Domain models, repositories, use cases, networking, database
+│   ├── androidMain/     #   Android-specific implementations (SQLite driver, etc.)
+│   └── iosMain/         #   iOS-specific implementations (native driver, etc.)
+├── composeApp/          # Android app — Jetpack Compose UI
+└── iosApp/              # iOS app — SwiftUI
+```
 
-To build and run the development version of the iOS app, use the run configuration from the run widget
-in your IDE’s toolbar or open the [/iosApp](./iosApp) directory in Xcode and run it from there.
+**Key architectural decisions:**
+- **Koin** for dependency injection (works across KMP targets, unlike Hilt)
+- **Ktor** for HTTP networking (native KMP support, unlike Retrofit)
+- **SQLDelight** for local database (generates Kotlin from SQL, KMP-native)
+- **kotlinx.serialization** for JSON parsing (compiler plugin, no reflection)
 
----
+## Tech Stack
 
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+| Layer | Technology |
+|-------|-----------|
+| Shared Logic | Kotlin Multiplatform |
+| Android UI | Jetpack Compose + Material 3 |
+| iOS UI | SwiftUI |
+| Networking | Ktor 3.4 |
+| Database | SQLDelight 2.3 |
+| DI | Koin 4.1 |
+| Serialization | kotlinx.serialization |
+| Async | Kotlin Coroutines + Flow |
+| CI | GitHub Actions |
+
+## Build & Run
+
+**Requirements:** Android Studio with KMP plugin, JDK 17+
+
+```shell
+# Android
+./gradlew :composeApp:assembleDebug
+
+# Shared module tests
+./gradlew :shared:allTests
+```
+
+For iOS, open `iosApp/` in Xcode and run from there.
+
+## License
+
+MIT
