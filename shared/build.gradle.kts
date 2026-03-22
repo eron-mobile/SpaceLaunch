@@ -62,6 +62,9 @@ sqldelight {
 android {
     namespace = "com.eronmobile.spacelaunch.shared"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
+    buildFeatures {
+        buildConfig = true
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11

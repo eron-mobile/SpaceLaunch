@@ -13,6 +13,15 @@ import kotlinx.serialization.json.Json
 
 expect fun platformEngine(): HttpClientEngineFactory<*>
 
+expect val isDebug: Boolean
+
+private val SENSITIVE_HEADERS = setOf(
+    "authorization",
+    "cookie",
+    "set-cookie",
+    "proxy-authorization",
+)
+
 fun createHttpClient(): HttpClient {
     return HttpClient(platformEngine()) {
         install(ContentNegotiation) {
@@ -25,7 +34,8 @@ fun createHttpClient(): HttpClient {
             )
         }
         install(Logging) {
-            level = LogLevel.HEADERS
+            level = if (isDebug) LogLevel.HEADERS else LogLevel.NONE
+            sanitizeHeader { header -> header.lowercase() in SENSITIVE_HEADERS }
         }
         defaultRequest {
             contentType(ContentType.Application.Json)
