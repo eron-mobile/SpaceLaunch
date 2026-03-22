@@ -1,0 +1,9 @@
+-- Placeholder table to bootstrap SQLDelight code generation.
+-- Real tables (launch, article, apod, etc.) will be added in later phases.
+
+CREATE TABLE IF NOT EXISTS db_version (
+    version INTEGER NOT NULL
+);
+
+getVersion:
+SELECT version FROM db_version LIMIT 1;
