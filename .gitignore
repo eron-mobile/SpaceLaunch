@@ -2,6 +2,7 @@
 
 ### Gradle ###
 .gradle
+.gradle_user_home
 build/
 
 # Ignore Gradle GUI config
